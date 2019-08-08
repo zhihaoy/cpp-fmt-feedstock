@@ -1,0 +1,43 @@
+{% set version = "b615eca" %}
+{% set sha256 = "f5b4713c3953703d75efa589b41017ab185639e134632dfece584c4878af55f8" %}
+
+package:
+  name: fmt
+  version: "2019.8.5"
+
+source:
+  url: https://github.com/fmtlib/fmt/archive/{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  skip: True  # [win and vc<14]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake >=3.1
+    - ninja
+  host: []  # Empty host dependency section
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/fmt/format.h           # [unix]
+    - test -f ${PREFIX}/lib/cmake/fmt/fmt-config.cmake # [unix]
+    - if exist %LIBRARY_PREFIX%\include\fmt\format.h (exit 0) else (exit 1)           # [win]
+    - if exist %LIBRARY_PREFIX%\lib\cmake\fmt\fmt-config.cmake (exit 0) else (exit 1) # [win]
+
+about:
+  home: https://github.com/fmtlib/fmt
+  license: BSD 2-Clause
+  license_family: BSD
+  license_file: LICENSE.rst
+  summary: A modern formatting library
+  description: |
+    {fmt} is an open-source formatting library for C++. It can be
+    used as a safe and fast alternative to (s)printf and iostreams.
+  doc_url: https://fmt.dev/latest/
+
+extra:
+  recipe-maintainers:
+    - zhihao.yuan
